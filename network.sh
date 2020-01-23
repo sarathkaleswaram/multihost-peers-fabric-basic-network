@@ -2,70 +2,9 @@
 
 function printHelp() {
   echo "Usage: "
-  echo "	./network.sh generate"
   echo "	./network.sh up"
   echo "	./network.sh down"
 }
-
-function generateCerts() {
-  which cryptogen
-  if [ "$?" -ne 0 ]; then
-    echo "cryptogen tool not found. exiting"
-    exit 1
-  fi
-  echo
-  echo "============== Generate certificates using cryptogen tool =============="
-  if [ -d "crypto-config" ]; then
-    rm -Rf crypto-config
-  fi
-  cryptogen generate --config=./crypto-config.yaml
-  res=$?
-  if [ $res -ne 0 ]; then
-    echo "Failed to generate certificates..."
-    exit 1
-  fi
-  echo
-}
-
-function generateChannelArtifacts() {
-  which configtxgen
-  if [ "$?" -ne 0 ]; then
-    echo "configtxgen tool not found. exiting"
-    exit 1
-  fi
-  echo
-
-  if [ -d config ]; then
-    echo    
-	else
-		mkdir config
-	fi
-
-  echo "==============  Generating Orderer Genesis block =============="
-  configtxgen -profile OneOrgOrdererGenesis -outputBlock ./config/genesis.block
-  res=$?
-  if [ $res -ne 0 ]; then
-    echo "Failed to generate orderer genesis block..."
-    exit 1
-  fi
-  echo
-  echo "==============  Generating channel configuration transaction 'channel.tx' =============="
-  configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
-  res=$?
-  if [ $res -ne 0 ]; then
-    echo "Failed to generate channel configuration transaction..."
-    exit 1
-  fi
-  echo
-  echo "==============  Generating anchor peer update for Org1MSP  =============="
-  configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
-  res=$?
-  if [ $res -ne 0 ]; then
-    echo "Failed to generate anchor peer update for Org1MSP..."
-    exit 1
-  fi
-}
-
 
 function networkUp() {
   docker-compose up -d
@@ -75,11 +14,11 @@ function networkUp() {
     exit 1
   fi
 
-  docker exec cli scripts/script.sh
-  if [ $? -ne 0 ]; then
-    echo "ERROR !!!!"
-    exit 1
-  fi
+  echo "Fetching the channel"
+  docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer channel fetch config -o orderer.example.com:7050 -c mychannel
+
+  echo "Joining peer1.org1.example.com to the channel"
+  docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer channel join -b mychannel_config.block
 }
 
 
@@ -98,9 +37,6 @@ if [ "${MODE}" == "up" ]; then
   networkUp
 elif [ "${MODE}" == "down" ]; then
   networkDown
-elif [ "${MODE}" == "generate" ]; then
-  generateCerts
-  generateChannelArtifacts
 else
   printHelp
   exit 1
