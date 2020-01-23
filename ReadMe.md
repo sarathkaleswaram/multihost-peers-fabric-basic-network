@@ -1,5 +1,10 @@
 # Hyperledger Fabric - multi peers on different hosts
 
+## Below steps are for master host. Change branch to 'new_peer' for peer host.
+```
+git checkout new_peer
+```
+
 ## Run docker-compose
 ```
 docker-compose -f docker-compose.yml up -d ca.example.com orderer.example.com peer0.org1.example.com couchdb
