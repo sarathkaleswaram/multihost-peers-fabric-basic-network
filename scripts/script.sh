@@ -42,13 +42,26 @@ instantiateChaincode() {
 
     peer chaincode instantiate \
         -o orderer.example.com:7050 \
-        -C mychannel \
+        -C $CHANNEL_NAME \
         -n mycc \
         -l golang \
         -v 1.0 \
         -c '{"Args":["init","a","100","b","200"]}'
 
     echo "===================== Chaincode is instantiated on channel '$CHANNEL_NAME' ===================== "
+    echo
+}
+
+invokeChaincode() {
+    sleep $DELAY
+
+    peer chaincode invoke \
+        -o orderer.example.com:7050 \
+        -C $CHANNEL_NAME \
+        -n mycc \
+        -c '{"Args":["invoke","a","b","10"]}'
+
+    echo "===================== Chaincode is invoked on channel '$CHANNEL_NAME' ===================== "
     echo
 }
 
@@ -60,7 +73,7 @@ CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/c
 echo "Creating channel..."
 createChannel
 
-echo "Having all peers join the channel..."
+echo "Having peer0 join the channel..."
 joinChannel
 
 echo "Installing chaincode..."
@@ -68,3 +81,6 @@ installChaincode
 
 echo "Instantiating chaincode..."
 instantiateChaincode
+
+echo "Invoking chaincode..."
+invokeChaincode

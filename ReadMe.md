@@ -4,6 +4,22 @@
 ```
 git checkout new_peer
 ```
+### Update IP address in .env file
+### Run in master host.
+```
+./network up
+```
+### Start new peer in other host from 'new_peer' branch
+### Run in peer host.
+```
+./network up
+```
+### Run in master host.
+```
+./network join
+```
+
+# (OR)
 
 ## Run docker-compose
 ```
