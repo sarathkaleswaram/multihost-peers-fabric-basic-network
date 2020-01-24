@@ -59,11 +59,7 @@ peer channel create \
 
 peer channel join -b mychannel.block
 
-peer chaincode install \
-    -n mycc \
-    -v 1.0 \
-    -p github.com/chaincode/ \
-    -l golang
+peer chaincode install ../../../chaincode/mycc.pak
 
 peer chaincode instantiate \
     -o orderer.example.com:7050 \

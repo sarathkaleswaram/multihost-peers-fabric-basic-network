@@ -27,11 +27,7 @@ joinChannel () {
 installChaincode() {
     sleep $DELAY
 
-    peer chaincode install \
-        -n mycc \
-        -v 1.0 \
-        -p github.com/chaincode/ \
-        -l golang
+    peer chaincode install ../../../chaincode/mycc.pak
 
     echo "===================== Chaincode is installed on peer0 ===================== "
     echo

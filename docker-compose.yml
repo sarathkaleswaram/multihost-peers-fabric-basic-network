@@ -55,10 +55,6 @@ services:
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
       - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
-      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -71,18 +67,6 @@ services:
         - ./config:/etc/hyperledger/configtx
     depends_on:
       - orderer.example.com
-      - couchdb
-    networks:
-      - basic
-
-  couchdb:
-    container_name: couchdb
-    image: hyperledger/fabric-couchdb
-    environment:
-      - COUCHDB_USER=
-      - COUCHDB_PASSWORD=
-    ports:
-      - 5984:5984
     networks:
       - basic
 
@@ -114,4 +98,3 @@ services:
     #depends_on:
     #  - orderer.example.com
     #  - peer0.org1.example.com
-    #  - couchdb

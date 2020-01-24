@@ -5,7 +5,6 @@ function printHelp() {
   echo "	./network.sh generate"
   echo "	./network.sh up"
   echo "	./network.sh down"
-  echo "	./network.sh join"
 }
 
 function generateCerts() {
@@ -82,14 +81,6 @@ function networkUp() {
   fi
 }
 
-function joinnetworkPeer() {
-  docker exec cli scripts/peer_script.sh
-  if [ $? -ne 0 ]; then
-    echo "ERROR !!!!"
-    exit 1
-  fi
-}
-
 function networkDown() {
   docker-compose down --volumes --remove-orphans
   docker rmi -f $(docker images | grep basic | awk {'print $3'})
@@ -105,8 +96,6 @@ if [ "${MODE}" == "up" ]; then
   networkUp
 elif [ "${MODE}" == "down" ]; then
   networkDown
-elif [ "${MODE}" == "join" ]; then
-  joinnetworkPeer
 elif [ "${MODE}" == "generate" ]; then
   generateCerts
   generateChannelArtifacts
