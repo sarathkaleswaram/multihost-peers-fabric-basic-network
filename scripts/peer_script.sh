@@ -31,7 +31,7 @@ invokeChaincode() {
     peer chaincode invoke \
         -o orderer.example.com:7050 \
         -C mychannel \
-        -n nda \
+        -n mycc \
         -c '{"Args":["invoke","a","b","10"]}'
 
     echo "===================== Invoke on channel '$CHANNEL_NAME' ===================== "
