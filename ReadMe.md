@@ -93,3 +93,9 @@ peer channel fetch newest \
 ```
 
 http://localhost:5984/_utils -> for couchdb
+
+Note: To generate .pak file. 
+```
+docker exec -it cli bash
+peer chaincode package -n mycc -p <path to chaincode> -v 1.0 mycc.pak
+```
