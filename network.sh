@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DELAY=3
+
 function printHelp() {
   echo "Usage: "
   echo "	./network.sh up"
@@ -14,13 +16,23 @@ function networkUp() {
     exit 1
   fi
 
-  # echo "Fetching the channel"
-  # docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer channel fetch config -o orderer.example.com:7050 -c mychannel
+  sleep $DELAY
 
-  # echo "Joining peer1.org1.example.com to the channel"
-  # docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer channel join -b mychannel_config.block
+  echo "Fetching the channel"
+  docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer channel fetch config -o orderer.example.com:7050 -c mychannel
 
-  # docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer chaincode install -n mycc -v 1.0 ./chaincode/mycc@1.0.cds -l golang
+  sleep $DELAY
+  echo "Joining peer1.org1.example.com to the channel"
+  docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer channel join -b mychannel_config.block
+
+  sleep $DELAY
+  docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer chaincode install -n mycc -v 1.0 ./chaincode/mycc.pak -l golang
+
+  sleep $DELAY
+  docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n mycc -c '{"Args":["invoke","a","b","10"]}'
+
+  sleep $DELAY
+  docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer1.org1.example.com peer chaincode query -C mychannel -n mycc -c '{"Args":["query","a"]}'
 }
 
 
