@@ -7,7 +7,7 @@ git checkout master
 
 ## Run docker-compose
 ```
-docker-compose -f docker-compose-peer2.yml up -d peer1.org1.example.com couchdb1
+docker-compose up
 ```
 
 ## Fetch the channel
