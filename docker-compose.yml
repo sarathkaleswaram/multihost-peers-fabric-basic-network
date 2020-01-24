@@ -17,7 +17,7 @@ services:
     volumes:
       - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
     extra_hosts:
-      - "peer1.org1.example.com:${NETWORK_SERVER}"
+      - "peer1.org1.example.com:${PEER_SERVER}"
     container_name: ca.example.com
     networks:
       - basic
@@ -107,7 +107,7 @@ services:
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./config:/opt/gopath/src/github.com/hyperledger/fabric/peer/config/
     extra_hosts:
-      - "peer1.org1.example.com:${NETWORK_SERVER}"
+      - "peer1.org1.example.com:${PEER_SERVER}"
     networks:
         - basic
     #depends_on:

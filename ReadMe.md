@@ -67,6 +67,13 @@ peer chaincode invoke \
     -C mychannel \
     -n mycc \
     -c '{"Args":["invoke","a","b","10"]}'
+
+peer channel getinfo -c mychannel
+
+peer channel fetch newest \
+    -o orderer.example.com:7050 \
+    -c mychannel \
+    last.block
 ```
 
 http://localhost:5984/_utils -> for couchdb
