@@ -106,6 +106,7 @@ services:
         - ./chaincode/:/opt/gopath/src/github.com/chaincode/
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./config:/opt/gopath/src/github.com/hyperledger/fabric/peer/config/
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
     extra_hosts:
       - "peer1.org1.example.com:${PEER_SERVER}"
     networks:
