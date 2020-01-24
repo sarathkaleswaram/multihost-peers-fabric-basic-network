@@ -38,6 +38,22 @@ invokeChaincode() {
     echo
 }
 
+queryChaincode() {
+    sleep $DELAY
+
+    peer chaincode query \
+        -C mychannel \
+        -n mycc \
+        -c '{"Args":["query","a"]}'
+
+    echo "===================== Query on channel '$CHANNEL_NAME' ===================== "
+    echo
+}
+
+getChannelInfo() {
+    peer channel getinfo -c mychannel
+}
+
 CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp 
 CORE_PEER_ADDRESS=peer1.org1.example.com:8051 
 CORE_PEER_LOCALMSPID="Org1MSP" 
@@ -51,3 +67,9 @@ installChaincode
 
 echo "Instantiating chaincode..."
 invokeChaincode
+
+echo "Querying chaincode..."
+queryChaincode
+
+echo "Getting channel Info..."
+getChannelInfo
