@@ -5,6 +5,14 @@
 git checkout master
 ```
 
+### Update IP address in .env file
+### Run in peer host.
+```
+./network up
+```
+
+# (OR)
+
 ## Run docker-compose
 ```
 docker-compose up
