@@ -65,7 +65,7 @@ joinChannel
 echo "Installing chaincode..."
 installChaincode
 
-echo "Instantiating chaincode..."
+echo "Invoking chaincode..."
 invokeChaincode
 
 echo "Querying chaincode..."
